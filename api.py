@@ -43,7 +43,7 @@ def add_data(item: NewsData):
                 new_df[col] = None
         new_df = new_df[existing_cols]
         new_df.to_csv('cryptonews.csv', mode='a', index=False, header=False)
-        df = new_df
+        df = pd.read_csv('cryptonews.csv')
         return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to add data: {str(e)}")
