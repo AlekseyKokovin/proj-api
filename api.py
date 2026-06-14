@@ -19,7 +19,7 @@ class NewsData(BaseModel):
 
 
 @app.get('/data')
-def get_data(limit: int = 10, subject: Optional[List[str]] = Query(None)):
+def get_data(limit: int = 10, offset: int = 0, subject: Optional[List[str]] = Query(None)):
     global df
     if subject:
         filt_df = df[df['subject'].str.lower().isin([s.lower() for s in subject])]
@@ -27,7 +27,8 @@ def get_data(limit: int = 10, subject: Optional[List[str]] = Query(None)):
         default_subjects = ['altcoin', 'bitcoin', 'ethereum']
         filt_df = df[df['subject'].str.lower().isin(default_subjects)]
     filt_df = filt_df.sort_values(by='date', ascending=False)
-    return filt_df.head(limit).to_dict(orient='records')
+    filt_df = filt_df.iloc[offset:offset + limit]
+    return filt_df.to_dict(orient="records")
 
 
 @app.post('/data')
