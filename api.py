@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+df = pd.read_csv('cryptonews.csv')
+
 
 class NewsData(BaseModel):
     date: str
@@ -18,7 +20,7 @@ class NewsData(BaseModel):
 
 @app.get('/data')
 def get_data(limit: int = 10, subject: Optional[List[str]] = Query(None)):
-    df = pd.read_csv('cryptonews.csv')
+    global df
     if subject:
         df = df[df['subject'].str.lower().isin([s.lower() for s in subject])]
     else:
@@ -30,6 +32,7 @@ def get_data(limit: int = 10, subject: Optional[List[str]] = Query(None)):
 
 @app.post('/data')
 def add_data(item: NewsData):
+    global df
     try:
         new_row = item.model_dump()
         new_df = pd.DataFrame([new_row])
@@ -40,6 +43,7 @@ def add_data(item: NewsData):
                 new_df[col] = None
         new_df = new_df[existing_cols]
         new_df.to_csv('cryptonews.csv', mode='a', index=False, header=False)
-        return {"status": "success", }
+        df = new_df
+        return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to add data: {str(e)}")
