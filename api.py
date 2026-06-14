@@ -17,7 +17,7 @@ class NewsData(BaseModel):
 
 
 @app.get('/data')
-def get_data(limit=10, subject: Optional[List[str]] = None):
+def get_data(limit: int = 10, subject: Optional[List[str]] = None):
     df = pd.read_csv('cryptonews.csv')
     if subject:
         df = df[df['subject'].str.lower().isin([s.lower() for s in subject])]
