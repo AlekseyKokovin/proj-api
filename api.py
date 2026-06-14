@@ -24,7 +24,7 @@ def get_data(limit: int = 10, subject: Optional[List[str]] = None):
     else:
         default_subjects = ['altcoin', 'bitcoin', 'ethereum']
         df = df[df['subject'].str.lower().isin(default_subjects)]
-    return df.head(limit).to_dict()
+    return df.head(limit).to_dict(orient='records')
 
 
 @app.post('/data')
