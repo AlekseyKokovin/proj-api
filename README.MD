@@ -31,5 +31,5 @@ Adds a new news article to the dataset.
 
 ---
 
-You can test the API here:  
+You can test the API here (I hosted it on a free plan, so it SHOULD work, but you never know):  
 **https://proj-api-a99p.onrender.com/docs**
