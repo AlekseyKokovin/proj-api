@@ -1,7 +1,6 @@
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from typing import List, Optional
 
 app = FastAPI()
 
