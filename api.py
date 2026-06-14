@@ -26,7 +26,7 @@ def get_data(limit: int = 10, subject: Optional[List[str]] = Query(None)):
     else:
         default_subjects = ['altcoin', 'bitcoin', 'ethereum']
         filt_df = df[df['subject'].str.lower().isin(default_subjects)]
-
+    filt_df = filt_df.sort_values(by='date', ascending=False)
     return filt_df.head(limit).to_dict(orient='records')
 
 
