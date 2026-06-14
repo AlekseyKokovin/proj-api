@@ -1,6 +1,6 @@
 from typing import Optional, List
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -17,13 +17,14 @@ class NewsData(BaseModel):
 
 
 @app.get('/data')
-def get_data(limit: int = 10, subject: Optional[List[str]] = None):
+def get_data(limit: int = 10, subject: Optional[List[str]] = Query(None)):
     df = pd.read_csv('cryptonews.csv')
     if subject:
         df = df[df['subject'].str.lower().isin([s.lower() for s in subject])]
     else:
         default_subjects = ['altcoin', 'bitcoin', 'ethereum']
         df = df[df['subject'].str.lower().isin(default_subjects)]
+
     return df.head(limit).to_dict(orient='records')
 
 
